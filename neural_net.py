@@ -26,11 +26,11 @@ def prepare_data():
 	train_data = []
 
 	for i in range(m_train):
-		train_x[i].append(1)
+		np.append(train_x[i], 1)
 		train_data.append((train_x[i], train_y[i]))
 
 	for i in range(m_test):
-		test_x[i].append(1)
+		np.append(test_x[i], 1)
 		test_data.append((test_x[i], test_y[i]))
 
 	return (train_data, test_data)

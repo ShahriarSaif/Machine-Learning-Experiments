@@ -3,7 +3,7 @@ from numpy import linalg
 import math
 from matplotlib import pyplot as plt
 import random
-poly_order = 10 #this is the optimal polynomial order
+poly_order = 4 #this is the optimal polynomial order
 
 def generate_data():
 	x = numpy.arange(0, 50, 0.5)
@@ -14,12 +14,12 @@ def generate_data():
 
 def fit_model(x, y, m):
 	w = []
-	for i in range(poly_order):
+	for i in range(poly_order + 1):
 		w.append(random.random())
 	X = []
 	for i in range(m):
 		vec = []
-		for j in range(poly_order):
+		for j in range(poly_order + 1):
 			vec.append(math.pow(x[i], j))
 		X.append(vec)
 	X = numpy.array(X)
@@ -29,7 +29,7 @@ def fit_model(x, y, m):
 
 def test_model(x, w):
 	sum = 0.0
-	for i in range(poly_order):
+	for i in range(poly_order + 1):
 		sum += w[i] * (x ** i)
 	return sum
 

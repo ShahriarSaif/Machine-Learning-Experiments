@@ -7,7 +7,7 @@ n_in = 5
 n_hid = 5
 n_out = 1
 alpha = 0.3
-max_iter = 500
+max_iter = 1000
 
 w_in2hid = []
 w_hid2out = []
@@ -57,29 +57,27 @@ def fit_net(tr_data):
 	iteration = 1
 
 	while iteration <= max_iter:
-		i = 0
-		while i < m:
-			in_layer_out = tr_data[i][0]
-			hid_layer_out = [neuron(w_in2hid[j], in_layer_out) for j in range(n_hid)]
-			out_layer_out = [neuron(w_hid2out[k], hid_layer_out) for k in range(n_out)]
+		i = np.random.randint(0, m)
+		in_layer_out = tr_data[i][0]
+		hid_layer_out = [neuron(w_in2hid[j], in_layer_out) for j in range(n_hid)]
+		out_layer_out = [neuron(w_hid2out[k], hid_layer_out) for k in range(n_out)]
+		for k in range(n_out):
+			a = out_layer_out[k] * (1 - out_layer_out[k]) * (out_layer_out[k] - tr_data[i][1])
+			out_layer_error.append(a)
+
+		for j in range(n_hid):
+			sum = 0
 			for k in range(n_out):
-				a = out_layer_out[k] * (1 - out_layer_out[k]) * (out_layer_out[k] - tr_data[i][1])
-				out_layer_error.append(a)
+				sum += out_layer_error[k] * w_hid2out[k][j]
+			a = hid_layer_out[j] * (1 - hid_layer_out[j]) * sum
+			hid_layer_error.append(a)
 
-			for j in range(n_hid):
-				sum = 0
-				for k in range(n_out):
-					sum += out_layer_error[k] * w_hid2out[k][j]
-				a = hid_layer_out[j] * (1 - hid_layer_out[j]) * sum
-				hid_layer_error.append(a)
-
-			for j in range(n_hid):
-				for k in range(n_in):
-					w_in2hid[j][k] -= alpha * hid_layer_error[j] * in_layer_out[k]
-			for j in range(n_out):
-				for k in range(n_hid):
-					w_hid2out[j][k] -= alpha * out_layer_error[j] * hid_layer_out[k]
-			i += 1
+		for j in range(n_hid):
+			for k in range(n_in):
+				w_in2hid[j][k] -= alpha * hid_layer_error[j] * in_layer_out[k]
+		for j in range(n_out):
+			for k in range(n_hid):
+				w_hid2out[j][k] -= alpha * out_layer_error[j] * hid_layer_out[k]
 		iteration += 1
 
 def make_classification(x):

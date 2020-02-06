@@ -91,7 +91,7 @@ class NeuralNetwork:
 		current_error, previous_error = self.error(), float('inf')
 		iter = 1
 		tolerance = 0.3
-		eps = 0.001
+		eps = 0.01
 
 		while iter <= 2000: #math.fabs(self.error() - tolerance) > eps:
 			for index in range(len(tr_data['data'])):
